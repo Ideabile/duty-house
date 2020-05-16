@@ -6,6 +6,7 @@ const getDate = (date: string) => {
     return `${d.getDate()}-${d.getMonth() > 9 ? d.getMonth() : '0' + d.getMonth()}-${d.getFullYear()}`;
 }
 
+
 export enum TIME_VIEW {
     DAY,
     WEEK,
@@ -44,8 +45,8 @@ export class HouseSpreadsheet {
 
     public getActivitiesThisWeek() {
         const today = new Date();
-        const start = startOfWeek(today);
-        const end = endOfWeek(today);
+        const start = startOfWeek(today, { weekStartsOn: 1 });
+        const end = endOfWeek(today, { weekStartsOn: 1 });
         return this.activities.filter(a => isWithinInterval(new Date(a[0]), { start, end }));
     }
 
@@ -171,7 +172,7 @@ export class HouseSpreadsheet {
                 if (range.valueRanges.length > 0) {
                     this.users = range?.valueRanges[0]?.values || [];
                     this.tasks = range?.valueRanges[1]?.values || [];
-                    this.activities = range?.valueRanges[2]?.values || [];
+                    this.activities = range?.valueRanges[2]?.values.reverse() || [];
                     resolve();
                     return;
                 }
